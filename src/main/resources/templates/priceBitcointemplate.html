@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html   xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<div class= "Container">
+ <h1>Bitcoin Price</h1>
+ <div>
+ <label for="startDate">Start date :</label>
+ <input type="date" id="startDate" name="trip-start" value="2018-07-22">
+ <label for="endDate">End date :</label>
+<input type="date" id="endDate" name="trip-start" value="2018-07-22">
+<button id="renderButton" class="favorite styled" type="button" onclick="getBitcoinValues()">Render</button>
+</div>
+ <canvas id="myChart" width="400" height="200" ></canvas>
+ </div>
+</body>
+</html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>    
+   let startDate = "[[${startDate}]]"
+   let endDate = "[[${endDate}]]"
+   let error = "[[${error}]]"
+   if(error !== "") {
+	   alert(error)
+   } else if (startDate !== "" && endDate !== "") {
+	   createChart(startDate, endDate)
+   }
+
+   function getBitcoinValues() {
+   let startDate = document.querySelector("#startDate").value
+   let endDate = document.querySelector("#endDate").value
+	if(startDate > endDate) {
+		alert("the start day must be before the end date !");
+	} else {
+		window.location = '/getprices/'+startDate+'/'+endDate	
+	}
+ }
+   
+   function createChart(startDate, endDate) {
+	   document.querySelector("#startDate").value = startDate
+	   document.querySelector("#endDate").value = endDate
+	   let chartStatus = Chart.getChart("myChart"); 
+	   if (chartStatus != undefined) { chartStatus.destroy();}
+
+	   let labels = "[[${labels}]]".replace(/\[|\]/g,'').split(',')
+	   let dataToDisplay = "[[${data}]]".replace(/\[|\]/g,'').split(',')
+	   let labelChart = 'Rapport of bitcoin prices from  '+ startDate + '  to '+endDate
+	   let carte = document.getElementById('myChart')
+	   let graph = new Chart(carte, {
+	       type: "line",
+	       data:{
+	         labels: labels,
+	           datasets: [{
+	        	     label: labelChart,
+	                 data: dataToDisplay,
+	                 borderColor: [
+	                        'rgb(255, 99, 132)',
+	                        'rgb(255, 159, 64)',
+	                        'rgb(255, 205, 86)',
+	                        'rgb(75, 192, 192)' ],
+	                 borderWidth: 1     }]
+	               },
+	       fill: false
+	        });
+	   }
+   
+  
+   </script>
