@@ -18,5 +18,5 @@ public interface BitoinPriceApiInterface {
 	 public Call<bitcoinPriceInformation> getPrices(
 		      @Query("start") LocalDate startDate,
 		      @Query("end") LocalDate endDate,
-              @Query("currency") String currency);
+                      @Query("currency") String currency);
 }
